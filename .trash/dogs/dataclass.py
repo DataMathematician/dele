@@ -8,8 +8,12 @@ from mapper import mapper
 
 @mapper.mapped
 @dataclass(unsafe_hash=True)
-class Parrot:
-    __tablename__ = 'parrots'
+class Dog:
+    __tablename__ = 'dogs'
+    __table_args__ = {
+        "comment": "комментарий к животнымы",
+        "md_header": "Собаки"
+    }
     __sa_dataclass_metadata_key__ = "sa"
     id = mapped_column(Integer, primary_key=True)
     name: str = field(metadata={"sa":Column(String(64))})

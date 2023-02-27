@@ -55,6 +55,7 @@ class MarkdownGenerator:
         enable_write=True,
         enable_TOC=True,
         logger=None,
+        encoding='cp1251',
     ):
         """
         Constructor method for MarkdownGenerator
@@ -68,6 +69,7 @@ class MarkdownGenerator:
         :param syntax: Markdown syntax flavor (GitHub vs GitLab)
         :param root_object: Whether the instance of this class is root object, defaults to None
         :param tmp_dir: Path of temporal directory. NOTE: not in user, defaults to None
+        :param encoding: defaults cp1251
         :param pending_footnote_references, defaults to None
         :param footnote_index
         """
@@ -130,6 +132,8 @@ class MarkdownGenerator:
         # Directory for tmp files, currently not in use.
         self.tmp_dir = tmp_dir
 
+        self.encoding = encoding
+
     def __enter__(self):
         """
         Override default enter method to enable
@@ -146,7 +150,7 @@ class MarkdownGenerator:
             self.filename.joinpath(DEFAULT_FILE_LOCATION, ".md")
             self.default_filename_on_use = True
         if not self.document:
-            self.document = open(f"{self.filename}", "w+")
+            self.document = open(f"{self.filename}", "w+", encoding=self.encoding)
             current_tmp_dir = tempfile.gettempdir()
             self.tmp_dir = tempfile.TemporaryDirectory(dir=current_tmp_dir)
 
@@ -171,6 +175,9 @@ class MarkdownGenerator:
             self.logger.warning("Warning: ToC is not enabled when the file is dynamically written.")
         # Everything will be written at once into the file
         if not self.enable_write:
+            for i, row in enumerate(self.document_data_array):
+                row = row.replace('\n','')
+                self.document_data_array[i] = row
             self.document.writelines(self.document_data_array)
         self.document.close()
 
