@@ -22,8 +22,8 @@ class MDDescription:
     table_comment: str | None
     table_columns: list[MDColumnDescription]
     table_path: str
-    #table_entity: str | None
-    #table_source: str | None
+    table_source: str | None
+    table_entity: str | None
 
     
 
@@ -44,10 +44,10 @@ class MDGen:
             table_name = mapper.local_table.name,
             table_comment = mapper.local_table.comment,
             table_columns = self.gen_columns(mapper.columns),
-            table_path = self.get_dataclass_path()
+            table_path = self.get_dataclass_path(),
             
-            #table_source = self.get_source(mapper.columns),
-            #table_entity = self.get_entity(mapper.columns),
+            table_source = self.get_source(mapper.columns),
+            table_entity = self.get_entity(mapper.columns),
             
         )
 
@@ -57,10 +57,22 @@ class MDGen:
         return str(Path(__file__).parent / "descriptions")
 
     def get_source(self, columns):
-        pass
+        kw = 'source'
+        for column in columns._all_columns:
+            if column.default is not None and column.name == kw:
+                default = column.default.arg
+                return default
+        
+        return None
 
-    def get_entitiy(self, columns):
-        pass
+    def get_entity(self, columns):
+        kw = 'entity'
+        for column in columns._all_columns:
+            if column.default is not None and column.name == kw:
+                default = column.default.arg
+                return default
+        
+        return None
 
     def gen_columns(self, columns):
         cols = []
@@ -115,8 +127,6 @@ class MDGen:
             q.append(dic)
         return q
         
-            
-
 
     def generate(self):
         from utils.md_gen import markdowngenerator as mg
@@ -125,17 +135,18 @@ class MDGen:
             with mg.MarkdownGenerator(
                 filename=description.table_path + f"/{'' if description.table_schema is None else description.table_schema + '_'}{description.table_name}.md", 
                 enable_write=False,
-                encoding='utf-8'
+                encoding='utf-8',
+                enable_TOC=False
             ) as doc:
                 doc.addHeader(2, f"Описание")
                 doc.addTable(
                     html_escape=True,
                     dictionary_list=[
                         {
-                            "Источник":f"{None}",
+                            "Источник":f"{description.table_source}",
                             "Схема MDM":f"{description.table_schema}",
                             "Имя таблицы MDM":f"{description.table_name}",
-                            "Сущность":f"{None}",
+                            "Сущность":f"{description.table_entity}",
                             "Комментарий":f"{description.table_comment}"
                         }
                     ],

@@ -13,13 +13,13 @@ class Cat:
     }
     id: Mapped[int] = mapped_column(primary_key=True, autoincrement=True, init=False)
     name: Mapped[str] = mapped_column(String(64))
-    surname_parrot: Mapped[list["Parrot"]] = relationship(default_factory=list, back_populates='surname')
-    source: Mapped[str] = mapped_column(String(32), comment='источник', init=False)
-    entity: Mapped[str] = mapped_column(String(32), comment='сущность', init=False)
+    #surname_parrot: Mapped[list["Parrot"]] = relationship(default_factory=list, back_populates='surname_cat')
+    source: Mapped[str] = mapped_column(String(32), comment='источник', init=False, default="1С ЗУП")
+    entity: Mapped[str] = mapped_column(String(32), comment='сущность', init=False, default='Кошка')
 
-    def __post_init__(self):
-        self.entity = 'Кошка'
-        self.source = '1С ЗУП'
+    # def __post_init__(self):
+    #     self.entity = 'Кошка'
+    #     self.source = '1С ЗУП'
     
 
 @mapper.mapped_as_dataclass(unsafe_hash=True)
@@ -31,8 +31,8 @@ class Parrot:
     }
     id: Mapped[int] = mapped_column(Integer, primary_key=True)
     name: Mapped[str] = mapped_column(String(64))
-    cat_id: Mapped[int] = mapped_column(ForeignKey("cats.id"))
-    surname_cat: Mapped["Cat"] = relationship(default=None)
+    #cat_id: Mapped[int] = mapped_column(ForeignKey("cats.id"))
+    #surname_cat: Mapped["Cat"] = relationship(default=None)
     
 
 @mapper.mapped_as_dataclass(unsafe_hash=True)

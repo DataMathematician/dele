@@ -17,14 +17,13 @@ mapper.metadata.create_all(engine)
 #     for column in inspector.get_columns(table):
 #        print("Column: %s" % column['name'])
        
-# from cats.dataclass import Cat, CatDog
+# from data_cls.dataclass import Cat
 # with Session(engine) as session:
-#     session.add(CatDog(name='pipi'))
+#     session.add(Cat(name='pipi'))
 #     session.commit()
     
-
 # with Session(engine) as session:
-#     q = session.get(Cat, 2)
+#     q = session.get(Cat, 5)
 #     print(q)
     
     
