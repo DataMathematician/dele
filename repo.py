@@ -6,7 +6,7 @@ from sqlalchemy import inspect
 
 engine = create_engine("sqlite:///smt.db")
 inspector = inspect(engine)
-
+from data_cls import dataclass
 from mapper import mapper
 mapper.metadata.create_all(engine)
 

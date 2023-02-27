@@ -55,7 +55,7 @@ class MarkdownGenerator:
         enable_write=True,
         enable_TOC=True,
         logger=None,
-        encoding='cp1251',
+        encoding='utf-8',
     ):
         """
         Constructor method for MarkdownGenerator

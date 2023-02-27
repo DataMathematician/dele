@@ -125,7 +125,7 @@ class MDGen:
             with mg.MarkdownGenerator(
                 filename=description.table_path + f"/{'' if description.table_schema is None else description.table_schema + '_'}{description.table_name}.md", 
                 enable_write=False,
-                encoding='cp1251'
+                encoding='utf-8'
             ) as doc:
                 doc.addHeader(2, f"Описание")
                 doc.addTable(
